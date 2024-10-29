@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.util.Scanner;
 
-public abstract class User {
+public abstract class User extends Hospital {
 
     //ASSIGNING ROLES BASED ON LOGIN DETAILS
     
@@ -9,6 +9,7 @@ public abstract class User {
     protected String name;
 
     public User(String hospitalID) {
+        super();
         this.hospitalID = hospitalID;
     }
 
@@ -33,7 +34,7 @@ public abstract class User {
             case "Pharmacist":
                  return new Pharmacist(hospitalID);
             case "Administrator":
-                return new Administrator(hospitalID);
+                return new Administrator(hospitalID,false);
             default:
                 throw new IllegalArgumentException("Unknown role: " + role);
         }

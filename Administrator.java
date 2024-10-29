@@ -1,53 +1,46 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Administrator extends User {
-
-    private static final String FILE_PATH = "./Data/Staff_List.csv";
  
-    protected String staffName; 
+    protected String staffName;
+    private List<String[]> allStaff;
+    private boolean isSecretUser;
 
-    public Administrator(String hospitalID)
+    public Administrator(String hospitalID, boolean isSecretUser)
     {
         super(hospitalID);
+        this.isSecretUser = isSecretUser;
         
     }
 
-    private List<String[]> loadStaff()
-    {
-        List<String[]> allStaff = new ArrayList<>();
-
-        try {
-            allStaff = Utility.readCSV(FILE_PATH,1);
-        } 
-        catch (IOException e) {
-            System.out.println("Error in loadStaff from Administrator" + e.getMessage());
-        }
-
-        for (String[] staffRow : allStaff) {
-
-            String staffID = staffRow[0];
-            String name = staffRow[1];
-            String role = staffRow[2];
-            String gender = staffRow[3];
-            String age = staffRow[4];
-        }
-
-        return allStaff;
-    }
-
-
     
     protected void displayMenu() {
-        this.staffName = loadStaffName(hospitalID);
-        System.out.println("Welcome Administrator, "+ staffName);
-        System.out.println("---- Administrator Menu ----");
-        System.out.println("1. View and Manage Hospital Staff");
-        System.out.println("2. View Appointments Details");
-        System.out.println("3. View and Manage Medication Inventory");
-        System.out.println("4. Approve Replenishment Requests");
-        System.out.println("5. Logout");
+        boolean isLoggedIn = true;
+        while (isLoggedIn && isValidStaff())
+        {
+            System.out.println("---- Administrator Menu ----");
+            System.out.println("1. View and Manage Hospital Staff");
+            System.out.println("2. View Appointments Details");
+            System.out.println("3. View and Manage Medication Inventory");
+            System.out.println("4. Approve Replenishment Requests");
+            System.out.println("5. Logout");
+
+            Scanner sc = new Scanner(System.in);
+            int choice = sc.nextInt();
+
+            switch (choice) {
+                case 1: displayStaff(allStaff); break;
+
+                case 5: System.out.println("You have logged out."); isLoggedIn = false; break;
+                    
+            
+                default:
+                    break;
+            }
+        }
     }
 
     private void displayStaff(List<String[]> allStaff)
@@ -59,28 +52,31 @@ public class Administrator extends User {
         }
     }
 
-    private String loadStaffName (String staffID)
-    {
-        List<String[]> allStaff = loadStaff();
-
+    private boolean isValidStaff ()
+    {   
+        allStaff = getStaff(this);
+        if (isSecretUser)
+        {
+            System.out.println("\nWelcome Administrator, SECRET");
+            return true;
+        }
         for (String[] staffRow:allStaff)
         {
-            if(staffRow[0].equals(staffID))
+            if(staffRow[0].equals(hospitalID))
             {
-                return staffRow[1];
+                String displayName = staffRow[1];
+                System.out.println("\nWelcome Administrator, " + displayName);
+                return true;
             }
         }
-
-        return "Staff is not found";
+        System.out.println("Access denied: Invalid staff credentials.");
+        return false;
 
     }
 
 
-    protected String getStaffName(String staffID, User requester)
-    {
-        if(requester == null) return "Access Denied";
 
-        return loadStaffName(staffID);
-    }
+
+
 
 }

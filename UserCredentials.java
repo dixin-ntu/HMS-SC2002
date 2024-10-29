@@ -11,13 +11,8 @@ public class UserCredentials {
 
     private static final String FILE_PATH1 = "./Data/User_Staff_List.csv";
     private static final String FILE_PATH2 = "./Data/User_Patient_List.csv";
+    private static final String SECRET_PATH = "./Data/User_Secret_List.csv";
 
-
-
-    // Secret USER
-    private static final String SECRET_USER = "OREO";
-    private static final String SECRET_PASS = "Secret";
-    private static final String SECRET_ROLE = "Administrator";
 
 
 
@@ -47,23 +42,39 @@ public class UserCredentials {
 
 
     public static User authenticate(String inputUsername, String inputPassword) {
-        if (SECRET_USER.equals(inputUsername) && SECRET_PASS.equals(inputPassword)) {
-            UserCredentials secretCredentials = new UserCredentials(SECRET_USER, SECRET_PASS, false);
-            return User.login(SECRET_USER, SECRET_ROLE, secretCredentials);
+
+        List<String[]> SecretUsers = new ArrayList<>();
+        try{
+            SecretUsers = Utility.readCSV(SECRET_PATH,1);
+        }
+
+        catch (IOException e) {
+            System.out.println("Error in loadSecret" + e.getMessage());
+            return null;
         }
 
 
+        for (String[] userRow : SecretUsers)
+        {
+            String SECRET_USER = userRow[0];
+            String SECRET_PASS = userRow[1];
+
+            if (SECRET_USER.equals(inputUsername) && SECRET_PASS.equals(inputPassword)) {
+                return new Administrator(SECRET_USER, true);        
+            }
+           
+        }
 
         List<String[]> allUsers = new ArrayList<>();
         try{
             allUsers = loadUser();
+            
         }
         catch (IOException e) {
             System.out.println("Error in loadUser" + e.getMessage());
             return null;
         }
-   
-   
+
         for (String[] userRow : allUsers) {
 
             String hospitalID = userRow[0];
@@ -77,6 +88,7 @@ public class UserCredentials {
                 return User.login(hospitalID, role, credentials);
                 
             }
+
         }
         System.out.println("Authentication failed: Invalid credentials");
         return null;
@@ -89,6 +101,5 @@ public class UserCredentials {
         allUsers.addAll(Utility.readCSV(FILE_PATH2,1));
         return allUsers;
     }
-
 
 }
