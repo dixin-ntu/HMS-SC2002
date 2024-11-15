@@ -3,12 +3,12 @@ import java.util.Scanner;
 public class Pharmacist extends User {
 
     protected String staffName;
-    private PharmacistMenu menu;
+    private Inventory menu;
 
     public Pharmacist(String hospitalID)
     {
         super(hospitalID);
-        this.menu = new PharmacistMenu(); // Association with PharmacistMenu
+        this.menu = new Inventory(); // Association with PharmacistMenu
     }
 
     private String displayStaffName(Administrator admin)
@@ -25,7 +25,8 @@ public class Pharmacist extends User {
         System.out.println("2. Update Prescription Status");
         System.out.println("3. View Medication Inventory");
         System.out.println("4. Submit Replenishment Request");
-        System.out.println("5. Logout");
+        System.out.println("5. Add New Medicine");
+        System.out.println("6. Logout");
 
         Scanner scanner = new Scanner(System.in);
         boolean isRunning = true;
@@ -48,6 +49,9 @@ public class Pharmacist extends User {
                     submitReplenishmentRequest();
                     break;
                 case 5:
+                    addNewMedicine();
+                    break;
+                case 6:
                     System.out.println("Logging out...");
                     isRunning = false;
                     break;
@@ -86,6 +90,10 @@ public class Pharmacist extends User {
         menu.updateMedicineList();
         System.out.println("Replenishment request submitted...");
         scanner.close();
+    }
+    private void addNewMedicine(){
+        System.out.println("Adding new medicine...");
+        menu.addNewMedicine();
     }
 
     //for approval
