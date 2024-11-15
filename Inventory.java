@@ -44,6 +44,64 @@ public class Inventory {
         }
     }
 
+    public void deleteMedicine() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the Medicine Name to remove from inventory: ");
+        String medicineNameToDelete = scanner.nextLine();
+
+        List<String> updatedData = new ArrayList<>();
+        boolean medicineFound = false;
+
+        scanner.close();
+
+        // Read the existing data
+        try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
+            String line;
+            boolean isFirstLine = true;
+
+            while ((line = br.readLine()) != null) {
+                if (isFirstLine) {
+                    // Add the header to the updated data
+                    updatedData.add(line);
+                    isFirstLine = false;
+                    continue;
+                }
+
+                String[] values = line.split(",");
+                String medicineName = values[0];
+
+                if (!medicineName.equalsIgnoreCase(medicineNameToDelete)) {
+                    // Add line to updated data if it's not the medicine to delete
+                    updatedData.add(line);
+                } else {
+                    medicineFound = true;
+                    System.out.println("Medicine '" + medicineNameToDelete + "' has been deleted from the inventory.");
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading the file: " + e.getMessage());
+            return;
+        }
+
+        if (!medicineFound) {
+            System.out.println("Medicine '" + medicineNameToDelete + "' not found in the inventory.");
+            return;
+        }
+
+        // Write the updated data back to the file
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CSV_FILE_PATH))) {
+            for (String dataLine : updatedData) {
+                bw.write(dataLine);
+                bw.newLine();
+            }
+        } 
+        
+        catch (IOException e) {
+            System.out.println("Error writing to the file: " + e.getMessage());
+        }
+    }
+
     public void viewMedicationInventory() {
         System.out.println("Viewing medication inventory...\n");
         System.out.printf("%-15s %-15s %-15s %-20s %-20s %-20s %-25s%n",
@@ -66,7 +124,9 @@ public class Inventory {
                             values[0], values[1], values[2], values[3], values[4], values[5], values[6]);
                 }
             }
-        } catch (IOException e) {
+        } 
+        
+        catch (IOException e) {
             System.out.println("Error reading the file: " + e.getMessage());
         }
     }

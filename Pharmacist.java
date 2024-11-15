@@ -25,8 +25,9 @@ public class Pharmacist extends User {
         System.out.println("2. Update Prescription Status");
         System.out.println("3. View Medication Inventory");
         System.out.println("4. Submit Replenishment Request");
-        System.out.println("5. Add New Medicine");
-        System.out.println("6. Logout");
+        System.out.println("5. Add New Medicine From Inventory");
+        System.out.println("6. Remove Medicine From Inventory");
+        System.out.println("7. Logout");
 
         Scanner scanner = new Scanner(System.in);
         boolean isRunning = true;
@@ -52,6 +53,9 @@ public class Pharmacist extends User {
                     addNewMedicine();
                     break;
                 case 6:
+                    deleteMedicine();
+                    break;
+                case 7:
                     System.out.println("Logging out...");
                     isRunning = false;
                     break;
@@ -92,8 +96,13 @@ public class Pharmacist extends User {
         scanner.close();
     }
     private void addNewMedicine(){
-        System.out.println("Adding new medicine...");
+        System.out.println("Adding new medicine to inventory...");
         menu.addNewMedicine();
+    }
+
+    private void deleteMedicine(){
+        System.out.println("Removing medicine from inventory...");
+        menu.deleteMedicine();
     }
 
     //for approval
