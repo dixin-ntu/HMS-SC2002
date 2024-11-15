@@ -8,7 +8,7 @@ public class Pharmacist extends User {
     public Pharmacist(String hospitalID)
     {
         super(hospitalID);
-        this.menu = new Inventory(); // Association with PharmacistMenu
+        this.menu = new Inventory(); // Association with Inventory
     }
 
     private String displayStaffName(Administrator admin)
@@ -80,7 +80,7 @@ public class Pharmacist extends User {
     private void viewMedicationInventory() {
         System.out.println("Viewing medication inventory...");
         menu.updateMedicineList();
-        menu.viewMedicationInventory(); // Delegates call to PharmacistMenu (Association)
+        menu.viewMedicationInventory();
     }
 
     private void submitReplenishmentRequest() {
@@ -90,7 +90,7 @@ public class Pharmacist extends User {
         String medicineName = scanner.nextLine();
         System.out.print("Enter the replenishment amount: ");
         int amount = scanner.nextInt();
-        menu.submitReplenishmentRequest(medicineName, amount); // Delegates call to PharmacistMenu (Association)
+        menu.submitReplenishmentRequest(medicineName, amount);
         menu.updateMedicineList();
         System.out.println("Replenishment request submitted...");
         scanner.close();
