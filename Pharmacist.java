@@ -71,6 +71,7 @@ public class Pharmacist extends User {
 
     private void viewMedicationInventory() {
         System.out.println("Viewing medication inventory...");
+        menu.updateMedicineList();
         menu.viewMedicationInventory(); // Delegates call to PharmacistMenu (Association)
     }
 
@@ -82,8 +83,26 @@ public class Pharmacist extends User {
         System.out.print("Enter the replenishment amount: ");
         int amount = scanner.nextInt();
         menu.submitReplenishmentRequest(medicineName, amount); // Delegates call to PharmacistMenu (Association)
+        menu.updateMedicineList();
         System.out.println("Replenishment request submitted...");
         scanner.close();
     }
+
+    //for approval
+    //public void approveReplenishment() {
+        //System.out.println("Checking replenishment request...");
+        //menu.updateMedicineList();
+        //menu.viewMedicationInventory();
+        //Scanner scanner = new Scanner(System.in);
+        //System.out.print("Enter the medicine name: ");
+        //String medicineName = scanner.nextLine();
+
+        //System.out.print("Enter approval status (Approved/Rejected): ");
+        //String approvalStatus = scanner.nextLine();
+
+        //menu.approveSubmissionRequest(medicineName, approvalStatus);
+        //System.out.println("Replenishment request Approved/Rejected...");
+        //scanner.close();
+    //}
     
 }
